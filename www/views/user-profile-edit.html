@@ -1,0 +1,53 @@
+	<!-- Modal -->
+	<div class="modal-header">
+			<h3>Edit User Profile</h3>
+	</div>
+	<div class="modal-body">
+	 <form name="forms.basicForm" class="form-horizontal form-validation" novalidate>
+				<div class="form-group">
+						<label for="name" class="col-sm-2 control-label">Name</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control input-sm" id="name" placeholder="Name" data-ng-model="user.name" required>
+						</div>
+				</div>
+				<div class="form-group">
+						<label for="userId" class="col-sm-2 control-label">User ID</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control input-sm" id="userId" placeholder="Email" data-ng-model="user.userid" required>
+						</div>
+				</div>
+		</form>
+		<form name="forms.passwordForm" class="form-horizontal form-validation" novalidate>
+				<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+								<div class="checkbox">
+										<label>
+												<input id="changePassword" type="checkbox" data-ng-model="user.changePassword" data-ng-false-value = "0" data-ng-true-value = "1"> 
+												Change Password
+										</label>
+								</div>
+						</div>
+				</div>
+				<div class="form-group" data-ng-show="user.changePassword">
+						<label for="currentPassword" class="col-sm-3 control-label">Current Password</label>
+						<div class="col-sm-9">
+							<input type="password" class="form-control input-sm" id="currentPassword" placeholder="(min length 6)" 
+								data-ng-model="user.password" data-ng-minlength="6" required>
+						</div>
+				</div>
+				<div class="form-group" data-ng-show="user.changePassword">
+						<label for="newPassword" class="col-sm-3 control-label">New Password</label>
+						<div class="col-sm-9">
+							<input type="password" class="form-control input-sm" id="newPassword" placeholder="(min length 6)" 
+								data-ng-model="user.newPassword" data-ng-minlength="6" required>
+						</div>
+				</div>
+
+		</form>  	
+	</div>
+	<div class="modal-footer">
+			<button class="btn btn-primary pull-left" ng-click="reset()">Reset</button>
+			<button class="btn btn-success" ng-click="save()" data-ng-disabled="!canSave()">Save</button>
+			<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+	</div>
+	<!-- end Modal -->
