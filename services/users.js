@@ -9,7 +9,7 @@ var router = express.Router();
 
 /* Get user profile */
 router.get('/getProfile', function(req, res, next) {
-	Users.getProfile(req.session.user.sid, function(result) {
+	Users.getProfile(req.session.user._id, function(result) {
 		res.send(result);
 	});
 });	
@@ -25,7 +25,7 @@ router.post('/add', function(req, res, next) {
 /* Update user profile */
 router.post('/updateProfile', function(req, res, next) {
 	var user = req.body.user;
-	Users.updateProfile(req.session.user.sid, user, function(result) {
+	Users.updateProfile(req.session.user._id, user, function(result) {
 		res.send(result);
 	});
 });

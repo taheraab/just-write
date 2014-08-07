@@ -10397,9 +10397,12 @@ button.toast-close-button {
   top: 2px;
   left: 15px;
 }
-.view-containter {
-  position: relative;
+
+.view-container {
+  position:relative;
+	height: 800px;
 }
+
 #content {
   position: absolute;
   top: 100px;

@@ -26,7 +26,7 @@ router.post('/signin', function(req, res, next) {
 */
 router.post('/signup', function(req, res, next) {
 	var user = {
-		userid: req.body.email,
+		email: req.body.email,
 		password: req.body.password,
 		name: req.body.name,
 	};

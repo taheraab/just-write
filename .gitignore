@@ -1,0 +1,14 @@
+node_modules/
+android-client/
+www/bower_components/
+www/scripts/Form/
+www/scripts/Map/
+www/scripts/Chart/
+www/scripts/Page/
+www/scripts/UI/UIDirective.js
+www/scripts/UI/UICtrl.js
+www/scripts/Table/
+www/scripts/Reports/
+www/scripts/Task/
+www/scripts/vendors/
+test.js

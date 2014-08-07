@@ -7,9 +7,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var mongoose = require('mongoose');
+var config = require('./app-config');
 
 var userService = require('./services/users');
 var loginService = require('./services/login');
+
+//Connect to database 
+mongoose.connect(config.databaseConnectionURI, null, function(err) {
+	if (err) console.error(err);
+});
 
 var app = express();
 

@@ -1,3 +1,6 @@
 .my-list {
 	height: 800px !important;
 }
+#header.top-header {
+	margin: 0 30px;
+}

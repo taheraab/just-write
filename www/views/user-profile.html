@@ -1,4 +1,5 @@
 <div class="page">
+	<div class="row">
 	<div class="col-md-8">
     <section class="panel panel-default">
         <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span>&nbsp;<span data-i18n="User Profile"></span></strong></div>
@@ -11,24 +12,8 @@
 										{{user.name}}
 								</li>
 								<li>
-										<label>User ID</label>
-										{{user.userid}}
-								</li>
-								<li>
-										<label>Start Date</label>
-										{{user.startdate | date:'MM/dd/yyyy'}}
-								</li>
-								<li>
-										<label>End Date</label>
-										{{user.enddate | date:'MM/dd/yyyy'}}
-								</li>
-								<li>
-										<label>Company Admin</label>
-										{{user.istenantadmin? 'Yes' : 'No'}}
-								</li>								
-								<li>
-										<label>Roles</label>
-										{{user.roles}}
+										<label>Email</label>
+										{{user.email}}
 								</li>
 							</ul>							
 						</div>
@@ -39,5 +24,6 @@
 				</form>	
         </div>
     </section>
+		</div>
 		</div>
 	</div>

@@ -97,16 +97,8 @@ mainControllers.controller('UserProfileEditCtrl',
 		$scope.forms = {basicForm: null, passwordForm: 	null};
 		
 		$scope.save = function() { 
-			var u = {
-				name: $scope.user.name,
-				userid: $scope.user.userid,
-				changePassword: $scope.user.changePassword,
-				password: $scope.user.password,
-				newPassword: $scope.user.newPassword
-			};
-			
 			//save in database
-			$http.post('/services/users/updateProfile', {user: u})
+			$http.post('/services/users/updateProfile', {user: $scope.user})
 				.success(function(result) {
 					$modalInstance.close(result);
 				})
