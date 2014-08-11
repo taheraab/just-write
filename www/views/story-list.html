@@ -4,74 +4,63 @@
 		</div>
 		<div class="panel-body">
 			<div class="col-sm-3">
-				<p class="text-right"><a href="" class="btn btn-info btn-xs">New</a></p>
-				<div class="list-group my-list" data-slim-scroll>
-					<a href="" class="list-group-item active">
-							Cras justo odio
+				<p class="text-right"><a href="" data-ng-click="createStory()" tooltip="Add new story">New</a></p>
+				<div class="list-group" data-slim-scroll data-scroll-height="800px">
+					<a href="" class="list-group-item" data-ng-repeat="story in stories" data-ng-class="{active: curStoryIndex == $index}" 
+						data-ng-click="setCurStoryIndex($index)">
+							{{story.title}}
 					</a>
-					<a class="list-group-item">
-							Dapibus ac facilisis in
-					</a>
-					<a class="list-group-item">
-							Dapibus ac facilisis in
-					</a>
-					<a class="list-group-item">
-							Dapibus ac facilisis in
-					</a>
-										<a class="list-group-item">
-							Dapibus ac facilisis in
-					</a>
-					<a class="list-group-item">
-							Dapibus ac facilisis in
-					</a>
-			</div>
+				</div>	
 		</div>
-		<div class="col-sm-6">
-			<p class="text-right"><a href="" class="btn btn-info btn-xs">Edit</a>&emsp;<a href="" class="btn btn-info btn-xs">View Story</a></p>
-			<div class="media">
-				<div class="media-body">
-						<ul class="list-unstyled list-info">
-								<li>
-										<label>Tile</label>
-										Some title
-								</li>
-								<li>
-										<label>Description</label>
-										Some Description
-								</li>
-								<li>
-									<label>Total Num of Pages</label>
-									4
-								</li>
-								<li>
-									<label>Total Num of Words</label>
-									5000
-								</li>
-								<li>
-									<label>Characters</label>
-									<div>				
-										<dl class="dl-horizontal">
-											<dt>Description lists</dt>
-											<dd>A description list is perfect for defining terms.</dd>
-											<dt>Malesuada porta</dt>
-											<dd> kfdhkhdfk </dd>
-										</dl>	
-									</div>
-								</li>
-								<li>
-									<label>References/Notes</label>
-									<div>
-										<ul>
-											<li> Ref 1</li>
-											<li>Ref 2</li>
-										</ul>
-									</div>
-								</li>
-
-							</ul>		
-				</div>
-			</div>	
+		<div class="col-sm-8" data-ng-if="stories.length == 0">
+			<p> No stories found. Create a <a href="" data-ng-click="createStory()">new story.</a> </p>
 		</div>
+		<div class="col-sm-8" data-ng-if="stories.length > 0">
+			<p class="text-right text-primary"><a href="" tooltip="Go to story view">View Story</a></p>
+				<h3>Basic <a class="pull-right" href="" data-ng-click="editStory()" tooltip="Edit basic info"><i class="fa fa-edit"></i></a></h3>
+				<ul class="list-unstyled list-info">
+						<li>
+								<label>Tile</label>
+								{{stories[curStoryIndex].title}}
+						</li>
+						<li>
+							<label>Description</label>
+							{{stories[curStoryIndex].description}}
+						</li>
+						<!--
+						<li>
+							<label>Pages</label>
+							4
+						</li>
+						<li>
+							<label>Words</label>
+							5000
+						</li>
+						-->
+					</ul>
+						<h3>Characters <a class="pull-right" href="" data-ng-click="createCharacter()" tooltip="Add character"><i class="fa fa-plus-square"></i></a></h3>
+						<ul>
+							<li data-ng-mouseenter="showCharacterEdit[$index]=true" data-ng-mouseleave="showCharacterEdit[$index]=false" 
+								data-ng-init="showCharacterEdit[$index]=false;" data-ng-repeat="character in stories[curStoryIndex].characters">
+								<div data-ng-show="showCharacterEdit[$index]" class="pull-right">
+									<a href="" data-ng-click="editCharacter($index)" tooltip="Edit character"><i class="fa fa-pencil"></i></a> &emsp;
+									<a href="" data-ng-click="deleteCharacter($index)" tooltip="Delete character"> <i class="fa fa-times"></i></a>
+								</div>
+								<h4> {{character.name}} </h4>
+								<p>{{character.description}}</p>
+							</li>
+						</ul>
+				<h3>References/Notes<a class="pull-right" href="" data-ng-click="createReference()" tooltip="Add Reference"><i class="fa fa-plus-square"></i></a></h3>
+				<ul>
+					<li data-ng-mouseenter="showReferenceEdit[$index]=true" data-ng-mouseleave="showReferenceEdit[$index]=false" 
+						data-ng-init="showReferenceEdit[$index]=false;" data-ng-repeat="reference in stories[curStoryIndex].references">
+						<div data-ng-show="showReferenceEdit[$index]" class="pull-right">
+							<a href="" data-ng-click="editReference($index)" tooltip="Edit reference"><i class="fa fa-pencil"></i></a> &emsp;
+							<a href="" data-ng-click="deleteReference($index)" tooltip="Delete reference"> <i class="fa fa-times"></i></a></div>
+						{{reference}}
+					</li>
+				</ul>
+			
 		</div>
 	</div>
 </div>		
