@@ -3,8 +3,8 @@
 		<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> My Stories</strong>
 		</div>
 		<div class="panel-body">
-			<div class="col-sm-3">
-				<p class="text-right"><a href="" data-ng-click="createStory()" tooltip="Add new story">New</a></p>
+			<div class="col-sm-3 custom-col">
+				<p class="text-right"><a href="" class="btn btn-primary btn-xs" data-ng-click="createStory()" tooltip="Add new story">New</a></p>
 				<div class="list-group" data-slim-scroll data-scroll-height="800px">
 					<a href="" class="list-group-item" data-ng-repeat="story in stories" data-ng-class="{active: curStoryIndex == $index}" 
 						data-ng-click="setCurStoryIndex($index)">
@@ -12,11 +12,11 @@
 					</a>
 				</div>	
 		</div>
-		<div class="col-sm-8" data-ng-if="stories.length == 0">
-			<p> No stories found. Create a <a href="" data-ng-click="createStory()">new story.</a> </p>
+		<div class="col-sm-9 custom-col" data-ng-if="stories.length == 0">
+			<h3> You have no stories. Create a <a href="" data-ng-click="createStory()">new story.</a> </h3>
 		</div>
-		<div class="col-sm-8" data-ng-if="stories.length > 0">
-			<p class="text-right text-primary"><a href="" tooltip="Go to story view">View Story</a></p>
+		<div class="col-sm-9" data-ng-if="stories.length > 0">
+			<p class="text-right"><a class="btn btn-xs btn-primary" href="#/pages" tooltip="Go to story view">View Story</a></p>
 				<h3>Basic <a class="pull-right" href="" data-ng-click="editStory()" tooltip="Edit basic info"><i class="fa fa-edit"></i></a></h3>
 				<ul class="list-unstyled list-info">
 						<li>
@@ -57,7 +57,7 @@
 						<div data-ng-show="showReferenceEdit[$index]" class="pull-right">
 							<a href="" data-ng-click="editReference($index)" tooltip="Edit reference"><i class="fa fa-pencil"></i></a> &emsp;
 							<a href="" data-ng-click="deleteReference($index)" tooltip="Delete reference"> <i class="fa fa-times"></i></a></div>
-						{{reference}}
+						<p>{{reference}}</p>
 					</li>
 				</ul>
 			

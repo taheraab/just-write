@@ -1,0 +1,85 @@
+<div class="page">
+	<div class="panel panel-default">
+		<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> {{storyTitle}}</strong>
+			<a href="#/stories" class="pull-right"> My stories</a>
+		</div>
+		<div class="panel-body">
+			<div class="col-sm-3 custom-col" data-ng-show="!collapseMenu">
+				<form class="form-horizontal">
+				<div class="form-group">
+						<label for="label" class="col-sm-2 control-label">Label</label>
+					<div class="col-sm-8 first-custom-col">
+						<select id="label" class="form-control input-sm">
+							<option>Label 1 </option>
+						</select>
+					</div>
+					<div class="col-sm-2 custom-col">
+						<a class="btn-icon btn-icon-sm bg-primary" href="" data-ng-click="toggleCollapseMenu()" tooltip="Collapse menu">
+							<i class="fa fa-chevron-left"></i></a>
+					</div>
+				</div>
+				</form>
+				<div class="list-group" data-slim-scroll data-scroll-height="800px">
+					<a href="" class="list-group-item" data-ng-repeat="page in pages" data-ng-class="{active: $index == curPageIndex}"
+						data-ng-click="updateActivePages($index)">
+							{{page.title}}
+					</a>
+				</div>	
+			</div>
+		<div data-ng-class="{'col-sm-12': collapseMenu, 'col-sm-9': !collapseMenu}">
+			<div class="pull-left" data-ng-show="collapseMenu">
+				<a class="btn-icon btn-icon-sm bg-primary" href="" data-ng-click="toggleCollapseMenu()" tooltip="Show menu">
+					<i class="fa fa-chevron-right"></i></a>
+			</div>
+			<div class="ui-tab-container"> <!-- page content -->
+				<tabset class="ui-tab">
+					<tab data-ng-repeat="page in activePages" active="page.active" select="setCurPageIndex($index)" data-ng-controller="PageCtrl">
+						<tab-heading>
+							<div class="pull-right"><a href="" data-ng-click="closePage()"><i class="fa fa-times"></i></a></div> 
+							{{page.title | limitTo: 10}} &emsp;
+						</tab-heading>
+						<div data-ng-if="!editing">
+							<h3>{{page.title}}
+								<div class="pull-right">
+									<a href=""><i class="fa fa-edit"></i> </a>
+									&emsp;<a href=""><i class="fa fa-trash-o"></i></a>
+								</div>
+							</h3>	
+							<hr>
+							{{page.content}}
+						</div>
+						<div data-ng-if="editing">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="title">Title</label>
+									<div class="col-sm-11">
+										<input type="text" id="title" class="form-control input-sm" data-ng-model="page.title"> 
+									</div>
+								</div>
+								<div text-angular ng-model="page.content" class="ui-editor"></div>
+								<br>
+								<div class="row">
+									<div class="col-sm-1 col-md-1">
+										<button class="btn btn-sm btn-primary">Reset</button>
+									</div>
+									<div class="col-sm-offset-7 col-sm-2 col-md-offset-9 col-md-1">
+											<button class="btn btn-sm btn-success pull-right">Save</button>
+									</div>
+									<div class="col-sm-2 col-md-1">	
+										<button class="btn btn-sm btn-warning pull-right">Cancel</button>
+									</div>	
+								</div>
+							</form>
+						</div>
+						
+					</tab>
+					<tab>
+						<tab-heading>
+							<a href="" data-ng-click="addPage()" tooltip="New page"><i class="fa fa-plus"></i></a> 
+						</tab-heading>
+					</tab>
+				</tabset>
+			</div>
+		</div>
+	</div>
+</div>		
