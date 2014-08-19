@@ -64,6 +64,7 @@ mainControllers.controller('UserProfileCtrl', ['$scope', '$http', '$modal',
 			var modalInstance = $modal.open({
 				templateUrl: 'views/user-profile-edit.html',
 				controller: 'UserProfileEditCtrl',
+				backdrop: 'static',
 				resolve: {
 					user: function() {
 						return $scope.user;
@@ -136,4 +137,23 @@ mainControllers.controller('DashboardCtrl', ['$scope',
 	
 	}
 ]);
+
+/*
+* Controller for confirmation dialog
+*/
+mainControllers.controller('ConfirmDialogCtrl', ['$scope', '$modalInstance', 'msg', 
+	function($scope, $modalInstance, msg) {
+		$scope.msg = msg;
+		$scope.ok = function() {
+			$modalInstance.close(true);
+		};
+
+		$scope.cancel = function() {
+			$modalInstance.dismiss('cancel');
+		};
+
+	}
+]);
+
+
 

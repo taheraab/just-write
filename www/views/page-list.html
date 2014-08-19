@@ -7,10 +7,19 @@
 			<div class="col-sm-3 custom-col" data-ng-show="!collapseMenu">
 				<form class="form-horizontal">
 				<div class="form-group">
-						<label for="label" class="col-sm-2 control-label">Label</label>
-					<div class="col-sm-8 first-custom-col">
-						<select id="label" class="form-control input-sm">
-							<option>Label 1 </option>
+					<div class="col-sm-3 first-custom-col">
+            <div class="btn-group">
+                <button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" tooltip="label menu"> Label </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="" data-ng-click="editLabel()">Edit</a></li>
+                    <li><a href="" data-ng-click="createLabel()">New</a></li>
+										<li><a href="" data-ng-click="deleteLabel()">Delete</a></li>
+                </ul>
+            </div>
+					</div>
+					<div class="col-sm-7 custom-col">
+						<select id="label" class="form-control input-sm" data-ng-model="curLabel" 
+							data-ng-options="label.name for label in labels" data-ng-change="reInit()">
 						</select>
 					</div>
 					<div class="col-sm-2 custom-col">
@@ -35,49 +44,52 @@
 				<tabset class="ui-tab">
 					<tab data-ng-repeat="page in activePages" active="page.active" select="setCurPageIndex($index)" data-ng-controller="PageCtrl">
 						<tab-heading>
-							<div class="pull-right"><a href="" data-ng-click="closePage()"><i class="fa fa-times"></i></a></div> 
+							<div class="pull-right"><a href="" data-ng-click="close($index)" ><i class="fa fa-times"></i></a></div> 
 							{{page.title | limitTo: 10}} &emsp;
 						</tab-heading>
 						<div data-ng-if="!editing">
 							<h3>{{page.title}}
 								<div class="pull-right">
-									<a href=""><i class="fa fa-edit"></i> </a>
-									&emsp;<a href=""><i class="fa fa-trash-o"></i></a>
+									<a href="" tooltip="Edit mode" data-ng-click="edit()"><i class="fa fa-edit"></i> </a>
+									&emsp;<a href="" tooltip="Delete page" data-ng-click="delete()"><i class="fa fa-trash-o"></i></a>
 								</div>
 							</h3>	
 							<hr>
 							{{page.content}}
 						</div>
 						<div data-ng-if="editing">
-							<form class="form-horizontal">
+							<form name="forms.basicForm" class="form-horizontal form-validation" novalidate>
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="l">Label</label>
+									<div class="col-sm-3">
+										<select id="l" class="form-control input-sm" required 
+										data-ng-model="page.labelId" data-ng-options="label._id as label.name for label in labels"></select> 
+									</div>
+								</div>
 								<div class="form-group">
 									<label class="col-sm-1 control-label" for="title">Title</label>
 									<div class="col-sm-11">
-										<input type="text" id="title" class="form-control input-sm" data-ng-model="page.title"> 
+										<input type="text" id="title" class="form-control input-sm" data-ng-model="page.title" placeholder="Title" required> 
 									</div>
 								</div>
-								<div text-angular ng-model="page.content" class="ui-editor"></div>
+								<div text-angular data-ng-model="page.content" class="ui-editor"></div>
 								<br>
 								<div class="row">
 									<div class="col-sm-1 col-md-1">
-										<button class="btn btn-sm btn-primary">Reset</button>
+										<button class="btn btn-sm btn-primary" data-ng-click="reset()">Reset</button>
 									</div>
 									<div class="col-sm-offset-7 col-sm-2 col-md-offset-9 col-md-1">
-											<button class="btn btn-sm btn-success pull-right">Save</button>
+											<button class="btn btn-sm btn-success pull-right" data-ng-disabled="!forms.basicForm.$valid" data-ng-click="save()">Save</button>
 									</div>
 									<div class="col-sm-2 col-md-1">	
-										<button class="btn btn-sm btn-warning pull-right">Cancel</button>
+										<button class="btn btn-sm btn-warning pull-right" data-ng-click="cancel()">Cancel</button>
 									</div>	
 								</div>
 							</form>
 						</div>
 						
 					</tab>
-					<tab>
-						<tab-heading>
-							<a href="" data-ng-click="addPage()" tooltip="New page"><i class="fa fa-plus"></i></a> 
-						</tab-heading>
-					</tab>
+					<a class="btn-icon btn-icon-sm bg-primary pull-right" href="" data-ng-click="createPage()" tooltip="New page"><i class="fa fa-plus"></i></a> 
 				</tabset>
 			</div>
 		</div>

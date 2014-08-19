@@ -36,6 +36,7 @@ storyControllers.controller('StoryListCtrl', ['$scope', '$http', '$modal',
 			var modalInstance = $modal.open({
 				templateUrl: 'views/story-edit.html',
 				controller: 'StoryEditCtrl',
+				backdrop: 'static',
 				resolve: {
 					obj: function() {
 						return {title: '', description: ''};
@@ -65,6 +66,7 @@ storyControllers.controller('StoryListCtrl', ['$scope', '$http', '$modal',
 			var modalInstance = $modal.open({
 				templateUrl: 'views/story-edit.html',
 				controller: 'StoryEditCtrl',
+				backdrop: 'static',
 				resolve: {
 					obj: function() {
 							return obj;
@@ -97,6 +99,7 @@ storyControllers.controller('StoryListCtrl', ['$scope', '$http', '$modal',
 			var modalInstance = $modal.open({
 				templateUrl: 'views/character-edit.html',
 				controller: 'StoryEditCtrl',
+				backdrop: 'static',
 				resolve: {
 					obj: function() {
 						return character;
@@ -127,6 +130,7 @@ storyControllers.controller('StoryListCtrl', ['$scope', '$http', '$modal',
 			var modalInstance = $modal.open({
 				templateUrl: 'views/character-edit.html',
 				controller: 'StoryEditCtrl',
+				backdrop: 'static',
 				resolve: {
 					obj: function() {
 						return character;
@@ -169,6 +173,7 @@ storyControllers.controller('StoryListCtrl', ['$scope', '$http', '$modal',
 			var modalInstance = $modal.open({
 				templateUrl: 'views/reference-edit.html',
 				controller: 'StoryEditCtrl',
+				backdrop: 'static',
 				resolve: {
 					obj: function() {
 						return {storyId: $scope.stories[$scope.curStoryIndex]._id, reference: ''};
@@ -199,6 +204,7 @@ storyControllers.controller('StoryListCtrl', ['$scope', '$http', '$modal',
 			var modalInstance = $modal.open({
 				templateUrl: 'views/reference-edit.html',
 				controller: 'StoryEditCtrl',
+				backdrop: 'static',
 				resolve: {
 					obj: function() {
 						return obj;
