@@ -5,39 +5,25 @@ var pageControllers = angular.module('pageControllers', []);
 /*
 * Controller for my stories page
 */
-pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'ConfirmDialog', '$modal',
-	function($scope, $http, NavGuard, ConfirmDialog, $modal) {
+pageControllers.controller('PageListCtrl', ['$scope', '$http', '$routeParams', 'NavGuard', 'ConfirmDialog', '$modal',
+	function($scope, $http, $routeParams, NavGuard, ConfirmDialog, $modal) {
 		$scope.curPageIndex = 0;	
-		$scope.storyTitle = "Story 1";
 		$scope.collapseMenu = false;
 		$scope.activePages = [];
-		var storyId = 1;
-		
-		$scope.labels = [ 
-			{name: 'default'},
-			{name: 'xyz'},
-			{name: 'abc'},
-		];
-		
-		$scope.curLabel = $scope.labels[0];
-		var prevLabel = $scope.curLabel;
-		
-		$scope.pages = [
-			{title: 'Page 1 fjhgjfgjdfjgjdfg', content: 'Page 1 content', active: true},
-			{title: 'Page 2', content: 'Page 2 content', active: true}
-			];
-			
-		$scope.activePages.push($scope.pages[0]);
-		
+		var storyId = $routeParams.storyId;
+		var prevLabel;
+				
 		/**
 		* Get the list of labels and pages for this story
 		*/
 		$scope.init = function() {
 			//get labels
-			$http.post('/services/pages/getLabels', {storyId: storyId})
-				.success(function(labels) {
-					$scope.labels = labels;
-					$scope.curLabel = labels[0];
+			$http.post('/services/stories/getLabels', {storyId: storyId})
+				.success(function(story) {
+					$scope.storyTitle = story.title;
+					$scope.labels = story.labels;
+					$scope.curLabel = $scope.labels[0];
+					prevLabel = $scope.curLabel;
 					//get pages for current label
 					$scope.getPages();
 				});
@@ -50,9 +36,15 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 		$scope.getPages = function() {
 			$http.post('/services/pages', {labelId: $scope.curLabel._id})
 				.success(function(pages) {
-					$scope.pages = pages;			
+					$scope.pages = pages;
 					$scope.activePages = [];
-					$scope.curPageIndex = 0;
+					if (!$scope.pages.length) $scope.createPage(); 
+					else {
+						$scope.activePages.push($scope.pages[0]);
+						$scope.activePages[0].active = true;
+						$scope.curPageIndex = 0;
+					}
+					
 				});		
 		};
 		
@@ -76,12 +68,6 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 				}
 			});
 
-			function makeLabelCurrent() {
-				$scope.curLabel = $scope.labels[$scope.labels.length - 1];
-				$scope.pages = [];
-				$scope.activePages = [];
-				$scope.curPageIndex = 0;			
-			}
 			
 			modalInstance.result.then(function(result) {
 				if (result.err) $scope.notify('error', result.msg);
@@ -92,10 +78,14 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 							ConfirmDialog.show('You have unsaved changes. Do you want to change labels?', function(result) {
 								if (result) {
 									NavGuard.reset();
-									makeLabelCurrent();
+									$scope.curLabel = $scope.labels[$scope.labels.length - 1];
+									$scope.reInit();
 								}
 							});
-						}else makeLabelCurrent();
+						}else {
+							$scope.curLabel = $scope.labels[$scope.labels.length - 1];
+							$scope.reInit();
+						}
 					}
 			});		
 			
@@ -106,7 +96,9 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 		*/
 		
 		$scope.editLabel = function () {
-			var obj = {id: $scope.curLabel._id,
+			var obj = {
+				storyId: storyId,
+				labelId: $scope.curLabel._id,
 				name: $scope.curLabel.name
 			}
 			var created = false;
@@ -138,12 +130,35 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 		* Delete label
 		*/
 		$scope.deleteLabel = function() {
-			ConfirmDialog.show("Confirm label delete. Pages for this label will move to 'default' label", function(result) {
-				if (result) {
-					
-				}
-			});
-		}
+			function deleteLabel() {
+				$http.post('services/stories/deleteLabel', {storyId: storyId, labelId: $scope.curLabel._id})
+					.success(function(result) {
+						if (result.err) $scope.notify('error', result.msg);
+						else {
+							var index = $scope.labels.indexOf($scope.curLabel);
+							var nextIndex = (index == ($scope.labels.length - 1)) ? 0 : index + 1;
+							$scope.labels.splice(index, 1);
+							$scope.curLabel = $scope.labels[nextIndex];
+							$scope.reInit();
+							$scope.notify('success', result.msg);
+						}
+					});
+			}
+			if (NavGuard.isEditing()) {
+				ConfirmDialog.show('You have unsaved changes. Do you want to delete label?', function(result) {
+					if (result) {
+						NavGuard.reset();
+						deleteLabel();
+					}
+				});
+			} else {		
+				ConfirmDialog.show("Confirm label delete. Pages for this label will move to 'default' label", function(result) {
+					if (result) {
+						deleteLabel();
+					}
+				});
+			}
+		};
 		
 		/*
 		* Set prevLabel value
@@ -176,6 +191,7 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 			var page = {
 				title: 'Untitled',
 				content: '',
+				labelId: $scope.curLabel._id,
 				isNew: true,
 				active: true
 			};
@@ -184,13 +200,15 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 		}
 				
 		/*
-		* Update active pages
+		* Update active pages, called when a page is selected from page list
 		*/
 		$scope.updateActivePages = function(i) {
 			var index = $scope.activePages.indexOf($scope.pages[i]);
 			if (index == -1) {
 				$scope.activePages.push($scope.pages[i]);
-			}else $scope.activePages[index].active = true;
+				var index = $scope.activePages.length - 1;
+			}
+			$scope.activePages[index].active = true;
 			$scope.curPageIndex = i;
 		}
 
@@ -217,6 +235,8 @@ pageControllers.controller('PageListCtrl', ['$scope', '$http', 'NavGuard', 'Conf
 			$scope.activePages.splice(i, 1);
 		}
 		
+		//initialize scope
+		$scope.init();
 	}
 ]);
 
@@ -256,9 +276,26 @@ pageControllers.controller('PageCtrl', ['$scope', '$http', '$window', 'NavGuard'
 		* Save Page in db
 		*/
 		$scope.save = function() {
-			if ($scope.forms.basicForm != null && $scope.forms.basicForm.$dirty) {
-				console.log("In save");
-			}
+			var dest = ($scope.page.isNew)? 'services/pages/add' : 'services/pages/update'; 
+			$http.post(dest, {page: $scope.page})
+				.success(function(result) {
+					if (result.err) $scope.notify('error', result.msg) 
+					else {
+						if ($scope.page.isNew) {
+							delete $scope.page.isNew;
+							$scope.page._id = result.page._id;							
+						}
+						$scope.page.title = result.page.title;
+						$scope.page.labelId = result.page.labelId;
+						$scope.page.content = result.page.content;
+						$scope.page.contentUrl = result.page.contentUrl;						
+						$scope.notify('success', result.msg);
+						$scope.editing = false;
+						$scope.master = angular.copy($scope.page);
+					}
+				}).error(function() {
+					$scope.notify('error', 'Server error');
+				});
 		}
 		
 		/*
@@ -316,8 +353,8 @@ pageControllers.controller('PageCtrl', ['$scope', '$http', '$window', 'NavGuard'
 /*
 * Controller for editing label
 */
-pageControllers.controller('LabelEditCtrl', ['$scope', '$modalInstance', 'label', 'destinationUrl',
-	function($scope, $modalInstance, label, destinationUrl) {
+pageControllers.controller('LabelEditCtrl', ['$scope', '$http', '$modalInstance', 'label', 'destinationUrl',
+	function($scope, $http, $modalInstance, label, destinationUrl) {
 		$scope.label = label;
 		$scope.master = angular.copy($scope.label);
 		$scope.forms = {basicForm: null};

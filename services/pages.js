@@ -1,35 +1,27 @@
 'use strict';
 
 var express = require('express');
-var Stories = require('../models/Stories.js');
+var Pages = require('../models/Pages');
 
 var router = express.Router();
 
 
 
-/* Get story list for user */
-router.get('/', function(req, res, next) {
-	Stories.get(req.session.user._id, function(result) {
+
+router.post('/', function(req, res, next) {
+	Pages.get(req.body.labelId, function(result) {
 		res.send(result);
 	});
 });	
 	
-
-router.post('/getLabels', function(req, res, next) {
-	Stories.getLabels(req.body.storyId, function(result) {
-		res.send(result);
-	});
-});	
 
 	
 router.post('/add', function(req, res, next) {
-	var story = req.body.obj;
-	story.userId = req.session.user._id;
-	Stories.add(story, function(result) {
+	Pages.add(req.body.page, function(result) {
 		res.send(result);
 	});
 });
-
+/*
 router.post('/update', function(req, res, next) {
 	Stories.update(req.body.obj, function(result) {
 		res.send(result);
@@ -72,24 +64,5 @@ router.post('/deleteReference', function(req, res, next) {
 		res.send(result);
 	});
 });
-
-router.post('/addLabel', function(req, res, next) {
-	Stories.addLabel(req.body.label, function(result) {
-		res.send(result);
-	});
-});
-
-
-router.post('/updateLabel', function(req, res, next) {
-	Stories.updateLabel(req.body.label, function(result) {
-		res.send(result);
-	});
-});
-
-router.post('/deleteLabel', function(req, res, next) {
-	Stories.deleteLabel(req.body.storyId, req.body.labelId, function(result) {
-		res.send(result);
-	});
-});
-
+*/
 module.exports = router;

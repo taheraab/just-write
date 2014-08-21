@@ -13,6 +13,7 @@ var config = require('./app-config');
 var userService = require('./services/users');
 var loginService = require('./services/login');
 var storyService = require('./services/stories');
+var pageService = require('./services/pages');
 
 //Connect to database 
 mongoose.connect(config.databaseConnectionURI, null, function(err) {
@@ -53,8 +54,10 @@ app.get('/signout', function(req, res, next) {
 });
 
 // secure services with session check
+app.use('/files', express.static(path.join(__dirname, '/files')));
 app.use('/services/users', userService);
 app.use('/services/stories', storyService);
+app.use('/services/pages', pageService);
 
 app.set('port', process.env.PORT || 8080);
 //start the server

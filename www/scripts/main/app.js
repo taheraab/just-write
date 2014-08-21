@@ -35,7 +35,7 @@ mainApp.config(['$routeProvider',
 						templateUrl: 'views/story-list.html',
 						controller: 'StoryListCtrl'
 					}).
-					when('/pages', {
+					when('/pages/:storyId', {
 						templateUrl: 'views/page-list.html',
 						controller: 'PageListCtrl'
 					}).

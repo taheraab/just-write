@@ -16,7 +16,8 @@
 			<h3> You have no stories. Create a <a href="" data-ng-click="createStory()">new story.</a> </h3>
 		</div>
 		<div class="col-sm-9" data-ng-if="stories.length > 0">
-			<p class="text-right"><a class="btn btn-xs btn-primary" href="#/pages" tooltip="Go to story view">View Story</a></p>
+			<p class="text-right">
+				<a class="btn btn-xs btn-primary" data-ng-href="#/pages/{{stories[curStoryIndex]._id}}" tooltip="Go to story view">View Story</a></p>
 				<h3>Basic <a class="pull-right" href="" data-ng-click="editStory()" tooltip="Edit basic info"><i class="fa fa-edit"></i></a></h3>
 				<ul class="list-unstyled list-info">
 						<li>

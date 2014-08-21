@@ -26,16 +26,29 @@ Stories.prototype.get = function(userId, done) {
 
 };
 
+/*
+* Returns story title and labels
+*/
+Stories.prototype.getLabels = function(storyId, done) {
+	storyModel.findById(storyId, 'title labels', function(err, story) {
+		if (err) {
+			done({});
+		}else {
+			done(story);
+		}
+	});
+}
 
 /* 
 * Add a new story and return new object
 */
 Stories.prototype.add = function(story, done) {
 	var obj = new storyModel(story);
+	obj.labels.push({name: 'default'});
 	obj.save(function(err, story) {
 		if (err) {
 			console.error(err);
-			done({err: true, msg: 'Failed to add user'});
+			done({err: true, msg: 'Failed to add story'});
 		}else {
 			done({err: false, msg: 'Added story: ' + story.title + ' successfully', story: story});
 		}
@@ -210,5 +223,97 @@ Stories.prototype.deleteReference = function(storyId, index, done) {
 	});
 };
 
+/* 
+* Add new label
+*/
+Stories.prototype.addLabel = function(obj, done) {
+	storyModel.labelExists(obj.storyId, obj.name, null, function(result) {
+		if (result) {
+			done({err: true, msg: 'Label: ' + obj.name + ' already exists'});
+			return;
+		}
+		storyModel.findById(obj.storyId, function(err, story) {
+			if (err) {
+				console.error(err);
+				done({err: true, msg: 'Failed to add label'});
+			}else {
+				delete obj.storyId;
+				story.labels.push(obj);
+				var label = story.labels[story.labels.length - 1];
+				story.lastUpdatedAt = new Date();
+				story.save(function(err) {
+					if (err) {
+						console.error(err);
+						done({err: true, msg: 'Failed to add label'});
+					}else {
+						done({err: false, msg: 'Added label: ' + obj.name + ' successfully', label: label});
+					}
+				});	
+			}
+		});
+	});
+};
+
+/* 
+* Update label name
+*/
+Stories.prototype.updateLabel = function(obj, done) {
+	storyModel.labelExists(obj.storyId, obj.name, obj.labelId, function(result) {
+		if (result) {
+			done({err: true, msg: 'Label: ' + obj.name + ' already exists'});
+			return;
+		}
+		storyModel.findById(obj.storyId, function(err, story) {
+			if (err) {
+				console.error(err);
+				done({err: true, msg: 'Failed to update label'});
+			}else {
+				var label = story.labels.id(obj.labelId);
+				if (label.name == 'default') {
+					done({err: true, msg: 'Cannot update default label'});
+					return;
+				}
+				label.name = obj.name;
+				story.lastUpdatedAt = new Date();
+				story.save(function(err) {
+					if (err) {
+						console.error(err);
+						done({err: true, msg: 'Failed to update label'});
+					}else {
+						done({err: false, msg: 'Updated label: ' + obj.name + ' successfully'});
+					}
+				});	
+			}
+		});
+	});
+};
+
+/* 
+* Delete label: TODO : move pages for existing label to default label
+*/
+Stories.prototype.deleteLabel = function(storyId, labelId, done) {
+	storyModel.findById(storyId, function(err, story) {
+		if (err) {
+			console.error(err);
+			done({err: true, msg: 'Failed to delete label'});
+		}else {
+			var label = story.labels.id(labelId);
+			if (label.name == 'default') {
+				done({err: true, msg: 'Cannot delete default label'});
+				return;
+			}
+			label.remove();
+			story.lastUpdatedAt = new Date();
+			story.save(function(err) {
+				if (err) {
+					console.error(err);
+					done({err: true, msg: 'Failed to delete label'});
+				}else {
+					done({err: false, msg: 'Deleted label: ' + label.name + ' successfully'});
+				}
+			});	
+		}
+	});
+};
 
 module.exports = new Stories();

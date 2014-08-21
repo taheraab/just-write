@@ -11,9 +11,9 @@
             <div class="btn-group">
                 <button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" tooltip="label menu"> Label </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="" data-ng-click="editLabel()">Edit</a></li>
+                    <li><a href="" data-ng-click="editLabel()" data-ng-show = "labels.indexOf(curLabel) != 0">Edit</a></li>
                     <li><a href="" data-ng-click="createLabel()">New</a></li>
-										<li><a href="" data-ng-click="deleteLabel()">Delete</a></li>
+										<li><a href="" data-ng-click="deleteLabel()" data-ng-show ="labels.indexOf(curLabel) != 0">Delete</a></li>
                 </ul>
             </div>
 					</div>
@@ -47,7 +47,7 @@
 							<div class="pull-right"><a href="" data-ng-click="close($index)" ><i class="fa fa-times"></i></a></div> 
 							{{page.title | limitTo: 10}} &emsp;
 						</tab-heading>
-						<div data-ng-if="!editing">
+						<div data-ng-show="!editing">
 							<h3>{{page.title}}
 								<div class="pull-right">
 									<a href="" tooltip="Edit mode" data-ng-click="edit()"><i class="fa fa-edit"></i> </a>
@@ -55,9 +55,9 @@
 								</div>
 							</h3>	
 							<hr>
-							{{page.content}}
+							<div data-ng-include="page.contentUrl"> </div>
 						</div>
-						<div data-ng-if="editing">
+						<div data-ng-show="editing">
 							<form name="forms.basicForm" class="form-horizontal form-validation" novalidate>
 								<div class="form-group">
 									<label class="col-sm-1 control-label" for="l">Label</label>
