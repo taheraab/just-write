@@ -1,6 +1,8 @@
 {
   "name": "just-write",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "description": "Simple Story-writing app",
+  "main": "server.js",
   "private": true,
   "scripts": {
     "postinstall": "bower install",
@@ -18,5 +20,9 @@
     "mongoose": "^3.8.14",
     "morgan": "~1.0.0",
     "serve-favicon": "~2.0.x"
+  },
+  "engines": {
+    "node": "0.10.x"    
   }
+   
 }
