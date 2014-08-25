@@ -3,7 +3,8 @@
 var express = require('express');
 var Users = require('../models/Users.js');
 var router = express.Router();
-
+var config = require('../app-config');
+var fs = require('fs');
 
 /* 
 * Authenticate user, set session state
@@ -16,6 +17,16 @@ router.post('/signin', function(req, res, next) {
 			return;
 		}
 		req.session.user = user;
+		// Check is user files directory is present, else create it
+		config.user.dataDir = config.dataDir + '/' + user._id;
+		fs.exists(config.user.dataDir, function(result) {
+			if (!result) {
+				fs.mkdir(config.user.dataDir, function(err) {
+					console.log('mkdir');
+					if (err) console.error(err);
+				});
+			}
+		});
 		res.send(200);
 	});
 });

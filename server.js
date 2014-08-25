@@ -9,7 +9,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
 var config = require('./app-config');
+var fs = require('fs');
 
+var fileService = require('./services/files');
 var userService = require('./services/users');
 var loginService = require('./services/login');
 var storyService = require('./services/stories');
@@ -19,6 +21,7 @@ var pageService = require('./services/pages');
 mongoose.connect(config.databaseConnectionURI, null, function(err) {
 	if (err) console.error(err);
 });
+
 
 var app = express();
 
@@ -54,7 +57,7 @@ app.get('/signout', function(req, res, next) {
 });
 
 // secure services with session check
-app.use('/files', express.static(path.join(__dirname, '/files')));
+app.use('/services/files', fileService);
 app.use('/services/users', userService);
 app.use('/services/stories', storyService);
 app.use('/services/pages', pageService);
