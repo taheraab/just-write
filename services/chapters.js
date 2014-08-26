@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var Pages = require('../models/Pages');
+var Chapters = require('../models/Chapters');
 
 var router = express.Router();
 
@@ -9,7 +9,7 @@ var router = express.Router();
 
 
 router.post('/', function(req, res, next) {
-	Pages.get(req.body.labelId, function(result) {
+	Chapters.get(req.body.storyId, function(result) {
 		res.send(result);
 	});
 });	
@@ -17,7 +17,7 @@ router.post('/', function(req, res, next) {
 
 	
 router.post('/add', function(req, res, next) {
-	Pages.add(req.body.page, function(result) {
+	Chapters.add(req.body.chapter, function(result) {
 		res.send(result);
 	});
 });

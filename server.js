@@ -15,7 +15,7 @@ var fileService = require('./services/files');
 var userService = require('./services/users');
 var loginService = require('./services/login');
 var storyService = require('./services/stories');
-var pageService = require('./services/pages');
+var chapterService = require('./services/chapters');
 
 //Connect to database 
 mongoose.connect(config.databaseConnectionURI, null, function(err) {
@@ -63,7 +63,7 @@ app.get('/signout', function(req, res, next) {
 app.use('/services/files', fileService);
 app.use('/services/users', userService);
 app.use('/services/stories', storyService);
-app.use('/services/pages', pageService);
+app.use('/services/chapters', chapterService);
 
 app.set('port', process.env.PORT || 8080);
 //start the server

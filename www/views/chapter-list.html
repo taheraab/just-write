@@ -1,0 +1,72 @@
+<div class="page">
+	<div class="panel panel-default">
+		<div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> {{storyTitle}}</strong>
+			<a href="#/stories" class="pull-right"> My stories</a>
+		</div>
+		<div class="panel-body">
+			<div class="col-sm-3 custom-col" data-ng-show="!collapseMenu">
+					<div class="pull-right">
+						<a class="btn-icon btn-icon-sm bg-success" href="" data-ng-click="toggleCollapseMenu()" tooltip="Collapse menu">
+							<i class="fa fa-chevron-left"></i></a>
+					</div>
+
+				<div class="list-group" data-slim-scroll data-scroll-height="800px">
+					<a href="" class="list-group-item" data-ng-repeat="chapter in chapters" data-ng-class="{active: $index == curChapterIndex}"
+						data-ng-click="updateActiveChapters($index)">
+							{{chapter.title}}
+					</a>
+				</div>	
+			</div>
+		<div data-ng-class="{'col-sm-12': collapseMenu, 'col-sm-9': !collapseMenu}" class="custom-col">
+			<div class="pull-left" data-ng-show="collapseMenu">
+				<a class="btn-icon btn-icon-sm bg-success" href="" data-ng-click="toggleCollapseMenu()" tooltip="Show menu">
+					<i class="fa fa-chevron-right"></i></a>
+			</div>
+			<div class="ui-tab-container"> <!-- chapter content -->
+				<tabset class="ui-tab">
+					<tab data-ng-repeat="chapter in activeChapters" active="chapter.active" select="setCurChapterIndex($index)" data-ng-controller="ChapterCtrl">
+						<tab-heading>
+							<div class="pull-right"><a href="" data-ng-click="close($index)" ><i class="fa fa-times"></i></a></div> 
+							{{chapter.title | limitTo: 10}} &emsp;
+						</tab-heading>
+						<div data-ng-show="!editing">
+							<h3>{{chapter.title}}
+								<div class="pull-right">
+									<a href="" tooltip="Edit mode" data-ng-click="edit()"><i class="fa fa-edit"></i> </a>
+									&emsp;<a href="" tooltip="Delete chapter" data-ng-click="delete()"><i class="fa fa-trash-o"></i></a>
+								</div>
+							</h3>	
+							<hr>
+							<div ta-bind ng-model="chapter.content"> </div>
+						</div>
+						<div data-ng-show="editing">
+							<form name="forms.basicForm" class="form-horizontal form-validation" novalidate>
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="title">Title</label>
+									<div class="col-sm-11">
+										<input type="text" id="title" class="form-control input-sm" data-ng-model="chapter.title" placeholder="Title" required> 
+									</div>
+								</div>
+								<div text-angular data-ng-model="chapter.content" class="ui-editor"></div>
+								<br>
+								<div class="row">
+									<div class="col-sm-1 col-md-1">
+										<button class="btn btn-sm btn-primary" data-ng-click="reset()">Reset</button>
+									</div>
+									<div class="col-sm-offset-7 col-sm-2 col-md-offset-9 col-md-1">
+											<button class="btn btn-sm btn-success pull-right" data-ng-disabled="!forms.basicForm.$valid" data-ng-click="save()">Save</button>
+									</div>
+									<div class="col-sm-2 col-md-1">	
+										<button class="btn btn-sm btn-warning pull-right" data-ng-click="cancel()">Cancel</button>
+									</div>	
+								</div>
+							</form>
+						</div>
+						
+					</tab>
+					<a class="btn-icon btn-icon-sm bg-success pull-right" href="" data-ng-click="createChapter()" tooltip="New chapter"><i class="fa fa-plus"></i></a> 
+				</tabset>
+			</div>
+		</div>
+	</div>
+</div>		

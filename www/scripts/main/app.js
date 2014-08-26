@@ -5,7 +5,7 @@ var mainApp = angular.module('mainApp', ['ngRoute',
 	'mainControllers', 
 	'mainServices',
 	'storyControllers',
-	'pageControllers',
+	'chapterControllers',
   'ngAnimate', 
 	'ui.bootstrap', 
 	'app.directives', 
@@ -35,9 +35,9 @@ mainApp.config(['$routeProvider',
 						templateUrl: 'views/story-list.html',
 						controller: 'StoryListCtrl'
 					}).
-					when('/pages/:storyId', {
-						templateUrl: 'views/page-list.html',
-						controller: 'PageListCtrl'
+					when('/chapters/:storyId/:storyTitle', {
+						templateUrl: 'views/chapter-list.html',
+						controller: 'ChapterListCtrl'
 					}).
 					otherwise({
 							redirectTo: '/stories'

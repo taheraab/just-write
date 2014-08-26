@@ -2,45 +2,46 @@
 var config = require('../app-config.js');
 var fs = require('fs');
 var mongoose = require('mongoose');
-var pageSchema = require('../db-schema/Page');
-var pageModel = mongoose.model('Pages', pageSchema);
+var chapterSchema = require('../db-schema/Chapter');
+var chapterModel = mongoose.model('Chapters', chapterSchema);
 
-function Pages() {
+function Chapters() {
 }
 
 /*
-* Return pages for this story label
+* Return chapters for this story 
 */
-Pages.prototype.get = function(labelId, done) {
-	pageModel.find({labelId: labelId})
+Chapters.prototype.get = function(storyId, done) {
+	chapterModel.find({storyId: storyId})
 		.sort('-lastUpdatedAt')
-		.exec(function(err, pages) {
+		.exec(function(err, chapters) {
 		if (err) {
 			console.log(err);
 			done([]);
 			return;
 		}
-		console.log(pages);
-		done(pages);
+		console.log(chapters);
+		done(chapters);
 	});
 
 };
 
 /* 
-* Add a new page and return new object
+* Add a new chapter and return new object
 */
-Pages.prototype.add = function(page, done) {
-	delete page.isNew;
-	var obj = new pageModel(page);
-	obj.save(function(err, page) {
+Chapters.prototype.add = function(chapter, done) {
+	delete chapter.isNew;
+	var obj = new chapterModel(chapter);
+	obj.save(function(err, chapter) {
 		if (err) {
 			console.error(err);
-			done({err: true, msg: 'Failed to add page'});
+			done({err: true, msg: 'Failed to add chapter'});
 		}else {
-			done({err: false, msg: 'Added page: ' + page.title + ' successfully', page: page});
+			done({err: false, msg: 'Added chapter: ' + chapter.title + ' successfully', chapter: chapter});
 		}
 	});
 };
+
 
 /* 
 * Update basic story information 
@@ -91,4 +92,4 @@ Stories.prototype.deleteReference = function(storyId, index, done) {
 };
 */
 
-module.exports = new Pages();
+module.exports = new Chapters();

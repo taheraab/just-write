@@ -15,11 +15,6 @@ router.get('/', function(req, res, next) {
 });	
 	
 
-router.post('/getLabels', function(req, res, next) {
-	Stories.getLabels(req.body.storyId, function(result) {
-		res.send(result);
-	});
-});	
 
 	
 router.post('/add', function(req, res, next) {
@@ -73,23 +68,5 @@ router.post('/deleteReference', function(req, res, next) {
 	});
 });
 
-router.post('/addLabel', function(req, res, next) {
-	Stories.addLabel(req.body.label, function(result) {
-		res.send(result);
-	});
-});
-
-
-router.post('/updateLabel', function(req, res, next) {
-	Stories.updateLabel(req.body.label, function(result) {
-		res.send(result);
-	});
-});
-
-router.post('/deleteLabel', function(req, res, next) {
-	Stories.deleteLabel(req.body.storyId, req.body.labelId, function(result) {
-		res.send(result);
-	});
-});
 
 module.exports = router;
