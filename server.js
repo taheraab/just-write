@@ -22,6 +22,9 @@ mongoose.connect(config.databaseConnectionURI, null, function(err) {
 	if (err) console.error(err);
 });
 
+fs.mkdir(__dirname + '/files', function(err) {
+	console.error(err);
+});
 
 var app = express();
 
