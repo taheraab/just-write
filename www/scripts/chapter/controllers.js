@@ -39,20 +39,19 @@ chapterControllers.controller('ChapterListCtrl', ['$scope', '$http', '$routePara
 		$scope.createChapter = function() {
 			var chapter = {
 				title: 'Untitled',
-				content: '',
 				storyId: storyId,
 				isNew: true,
 				active: true,
 				sortorder: $scope.chapters.length
 			};
 			$scope.chapters.unshift(chapter);
-			$scope.updateActiveChapters(0);
+			$scope.updateActiveChapter(0);
 		}
 				
 		/*
 		* Update active chapters, called when a chapter is selected from chapter list
 		*/
-		$scope.updateActiveChapters = function(i) {
+		$scope.updateActiveChapter = function(i) {
 			var index = $scope.activeChapters.indexOf($scope.chapters[i]);
 			if (index == -1) {
 				$scope.activeChapters.push($scope.chapters[i]);
@@ -79,10 +78,17 @@ chapterControllers.controller('ChapterListCtrl', ['$scope', '$http', '$routePara
 		/*
 		* Called when a chapter is closed
 		*/
-		$scope.parentCloseChapter = function(i) {
-			if (typeof $scope.activeChapters[i].isNew != 'undefined' && $scope.activeChapters[i].isNew)
+		$scope.parentCloseChapter = function(i, deleteChapter) {
+			if ((typeof $scope.activeChapters[i].isNew != 'undefined' && $scope.activeChapters[i].isNew) || deleteChapter)
 				$scope.chapters.splice($scope.curChapterIndex, 1);
 			$scope.activeChapters.splice(i, 1);
+			if ($scope.chapters.length == 0) {
+				$scope.createChapter();
+			}
+			if ($scope.activeChapters.length == 0) {
+				//Make next chapter active
+				$scope.updateActiveChapter($scope.curChapterIndex);
+			}
 		}
 		
 		/*
@@ -129,26 +135,29 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 		if (typeof $scope.chapter.isNew != 'undefined' && $scope.chapter.isNew) 
 			$scope.editing = true;
 		$scope.forms = {basicForm: null};
-		
+		$scope.chapter.content = '';
 		$scope.master = angular.copy($scope.chapter);
+		
+		/* 
+		* Get content for this chapter
+		*/
+		function getContent(){
+			if (typeof $scope.chapter.contentUrl != 'undefined') {
+				$http.get($scope.chapter.contentUrl) 
+					.success(function(result) {
+						$scope.chapter.content = result;
+						$scope.master = angular.copy($scope.chapter);
+					})
+			}	
+		};
 		
 		/*
 		* Called when a chapter is closed
 		*/
 		$scope.close = function(i) {
 			if ($scope.activeChapters.length != 1) {
-				if ($scope.forms.basicForm != null && $scope.forms.basicForm.$dirty) {
-					ConfirmDialog.show('You have unsaved changes. Do you want to close?', function(result) {
-						if (result) {
-							NavGuard.setEditing(false);
-							$scope.reset();
-							$scope.parentCloseChapter(i);
-						}
-					});
-				}else {
-					NavGuard.setEditing(false);
-					$scope.parentCloseChapter(i);
-				}				
+				if ($scope.editing) $scope.cancel();
+				$scope.parentCloseChapter(i, false);
 			}
 		};
 		
@@ -167,12 +176,11 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 						}
 						$scope.chapter.title = result.chapter.title;
 						$scope.chapter.storyId = result.chapter.storyId;
-						$scope.chapter.content = result.chapter.content;
 						$scope.chapter.contentUrl = result.chapter.contentUrl;						
 						$scope.chapter.sortorder = result.chapter.sortorder;
 						$scope.notify('success', result.msg);
 						$scope.editing = false;
-						$scope.master = angular.copy($scope.chapter);
+						getContent();
 					}
 				}).error(function() {
 					$scope.notify('error', 'Server error');
@@ -210,15 +218,27 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 		*/
 		$scope.edit = function() {
 			$scope.editing = true;
+			
 		}
 		
 		/*
 		* Delete chapter in db
 		*/
-		$scope.deletechapter = function() {
-			if ($window.confirm("Confirm Delete")) {
-				
-			}
+		$scope.deleteChapter = function(i) {
+			ConfirmDialog.show('Confirm delete of chapter: ' + $scope.chapter.title + ' ?', function(result) {
+				if (result) {
+					$http.post('services/chapters/deleteChapter', {id: $scope.chapter._id})
+						.success(function(result) {
+							if (result.err) $scope.notify('error', result.msg)
+							else {
+								$scope.parentCloseChapter(i, true);
+								$scope.notify('success', result.msg);
+							}
+						}).error(function() {
+							$scope.notify('error', 'Server Error');
+						});
+				}
+			});
 		}
 		
 		/*
@@ -226,7 +246,10 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 		*/
 		$scope.$watch("editing", function(newVal, oldVal) {
 			NavGuard.setEditing(newVal);
+
 		});
+		
+		getContent();
 	}
 ]);
 

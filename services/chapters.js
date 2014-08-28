@@ -22,8 +22,20 @@ router.post('/add', function(req, res, next) {
 	});
 });
 
+router.post('/update', function(req, res, next) {
+	Chapters.update(req.body.chapter, function(result) {
+		res.send(result);
+	});
+});
+
 router.post('/updateSortorders', function(req, res, next) {
 	Chapters.updateSortorders(req.body.sortorders, function(result) {
+		res.send(result);
+	});
+});
+
+router.post('/deleteChapter', function(req, res, next) {
+	Chapters.deleteChapter(req.body.id, function(result) {
 		res.send(result);
 	});
 });

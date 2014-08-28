@@ -19,7 +19,7 @@ var chapterSchema = new Schema({
 
 chapterSchema.set('toObject', {virtuals: true});
 chapterSchema.set('toJSON', {virtuals: true});
-
+/*
 //Read contents of contentUrl into a string
 chapterSchema.virtual('content').get(function() {
 	if (this.contentUrl == '') return '';
@@ -27,7 +27,7 @@ chapterSchema.virtual('content').get(function() {
 	var data = fs.readFileSync(config.user.dataDir + '/' + filename, {encoding: 'utf8'});
 	return data;
 });
-
+*/
 //write contents to file pointed by contentUrl
 chapterSchema.virtual('content').set(function(value) {
 	var filename = this._id + '.html';

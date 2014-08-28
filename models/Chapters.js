@@ -64,23 +64,23 @@ Chapters.prototype.updateSortorders = function(sortorders, done) {
 };
 
 /* 
-* Update basic story information 
-*
-Stories.prototype.update = function(obj, done) {
-	storyModel.findById(obj.storyId, function(err, story) {
+* Update chapter
+*/
+Chapters.prototype.update = function(obj, done) {
+	chapterModel.findById(obj._id, function(err, chapter) {
 		if (err) {
 			console.error(err);
-			done({err: true, msg: 'Failed to update story'});
+			done({err: true, msg: 'Failed to update chapter'});
 		}else {
-			story.title = obj.title;
-			story.description = obj.description;
-			story.lastUpdatedAt = new Date();
-			story.save(function(err) {
+			chapter.title = obj.title;
+			chapter.content = obj.content;
+			chapter.lastUpdatedAt = new Date();
+			chapter.save(function(err, c) {
 				if (err) {
 					console.error(err);
-					done({err: true, msg: 'Failed to update story'});
+					done({err: true, msg: 'Failed to update chapter'});
 				}else {
-					done({err: false, msg: 'Updated story: ' + story.title + ' successfully'});
+					done({err: false, msg: 'Updated chapter: ' + chapter.title + ' successfully', chapter: c});
 				}
 			});	
 		}
@@ -89,27 +89,19 @@ Stories.prototype.update = function(obj, done) {
 
 
 /* 
-* Delete reference
-*
-Stories.prototype.deleteReference = function(storyId, index, done) {
-	storyModel.findById(storyId, function(err, story) {
+* Delete chapter
+*/
+Chapters.prototype.deleteChapter = function(id, done) {
+	chapterModel.remove({_id: id}, function(err) {
 		if (err) {
 			console.error(err);
-			done({err: true, msg: 'Failed to delete reference'});
-		}else {
-			story.references.splice(index, 1);
-			story.lastUpdatedAt = new Date();
-			story.save(function(err) {
-				if (err) {
-					console.error(err);
-					done({err: true, msg: 'Failed to delete reference'});
-				}else {
-					done({err: false, msg: 'Deleted reference successfully'});
-				}
-			});	
-		}
-	});
+			done({err: true, msg: 'Failed to delete chapter'});
+		}else 
+			done({err: false, msg: 'Deleted chapter successfully'});
+				
+	});	
+	
 };
-*/
+
 
 module.exports = new Chapters();
