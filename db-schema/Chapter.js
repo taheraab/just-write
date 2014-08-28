@@ -12,7 +12,8 @@ var chapterSchema = new Schema({
 	createdAt: {type: Date, default: new Date()},
 	lastUpdatedAt: Date,
 	contentUrl: String,
-	storyId: {type:ObjectId, required: 'storyId cannot be null'}
+	storyId: {type:ObjectId, required: 'storyId cannot be null'},
+	sortorder: Number
 	
 });
 

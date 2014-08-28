@@ -11,7 +11,8 @@ var mainApp = angular.module('mainApp', ['ngRoute',
 	'app.directives', 
 	'app.localization', 
 	'app.ui.services', 
-	'textAngular'
+	'textAngular',
+	'ui.sortable'
 ]);
 
 mainApp.config(['$httpProvider',

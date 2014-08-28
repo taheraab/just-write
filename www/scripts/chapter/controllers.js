@@ -12,7 +12,7 @@ chapterControllers.controller('ChapterListCtrl', ['$scope', '$http', '$routePara
 		$scope.activeChapters = [];
 		var storyId = $routeParams.storyId;
 		$scope.storyTitle = $routeParams.storyTitle;
-				
+		var chapterSortorders = [];		
 		
 		/*
 		* Load chapters for current label
@@ -42,10 +42,11 @@ chapterControllers.controller('ChapterListCtrl', ['$scope', '$http', '$routePara
 				content: '',
 				storyId: storyId,
 				isNew: true,
-				active: true
+				active: true,
+				sortorder: $scope.chapters.length
 			};
-			$scope.chapters.push(chapter);
-			$scope.updateActiveChapters($scope.chapters.length - 1);
+			$scope.chapters.unshift(chapter);
+			$scope.updateActiveChapters(0);
 		}
 				
 		/*
@@ -83,6 +84,36 @@ chapterControllers.controller('ChapterListCtrl', ['$scope', '$http', '$routePara
 				$scope.chapters.splice($scope.curChapterIndex, 1);
 			$scope.activeChapters.splice(i, 1);
 		}
+		
+		/*
+		* options for the sortable chapter title list
+		*/
+		$scope.sortableOptions = {
+			update: function(e, ui) {
+				chapterSortorders = [];
+				for (var i = 0; i < $scope.chapters.length; i++) {
+					if (typeof $scope.chapters[i].isNew == 'undefined')
+						chapterSortorders.push({id: $scope.chapters[i]._id});
+				}
+			},
+			
+			stop: function(e, ui) {
+				if (chapterSortorders.length == 0) return;
+				var j=0;
+				for (var i = 0; i < $scope.chapters.length; i++) {
+					if (typeof $scope.chapters[i].isNew == 'undefined')
+						chapterSortorders[j++].sortorder = $scope.chapters[i].sortorder;
+				}
+				$http.post('services/chapters/updateSortorders', {sortorders: chapterSortorders})
+					.success(function(result) {
+						if (result.err) $scope.notify('error', result.msg);
+						else $scope.notify('success', result.msg);
+					}).error(function() {
+						$scope.notify('error', 'Server error');
+					});
+				console.log(chapterSortorders);
+			}
+		};
 		
 		//initialize scope
 		$scope.init();
@@ -138,6 +169,7 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 						$scope.chapter.storyId = result.chapter.storyId;
 						$scope.chapter.content = result.chapter.content;
 						$scope.chapter.contentUrl = result.chapter.contentUrl;						
+						$scope.chapter.sortorder = result.chapter.sortorder;
 						$scope.notify('success', result.msg);
 						$scope.editing = false;
 						$scope.master = angular.copy($scope.chapter);

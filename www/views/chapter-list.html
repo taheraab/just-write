@@ -9,13 +9,14 @@
 						<a class="btn-icon btn-icon-sm bg-success" href="" data-ng-click="toggleCollapseMenu()" tooltip="Collapse menu">
 							<i class="fa fa-chevron-left"></i></a>
 					</div>
-
-				<div class="list-group" data-slim-scroll data-scroll-height="800px">
-					<a href="" class="list-group-item" data-ng-repeat="chapter in chapters" data-ng-class="{active: $index == curChapterIndex}"
-						data-ng-click="updateActiveChapters($index)">
-							{{chapter.title}}
-					</a>
-				</div>	
+				<div data-slim-scroll data-scroll-height="800px">
+					<div ui-sortable="sortableOptions" class="list-group" data-ng-model="chapters">
+						<a href="" 	class="list-group-item" data-ng-repeat="chapter in chapters" data-ng-class="{active: $index == curChapterIndex}" 
+							data-ng-click="updateActiveChapters($index)">
+								{{chapter.title}}
+						</a>
+					</div>
+				</div>
 			</div>
 		<div data-ng-class="{'col-sm-12': collapseMenu, 'col-sm-9': !collapseMenu}" class="custom-col">
 			<div class="pull-left" data-ng-show="collapseMenu">

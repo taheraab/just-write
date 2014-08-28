@@ -13,14 +13,14 @@ function Chapters() {
 */
 Chapters.prototype.get = function(storyId, done) {
 	chapterModel.find({storyId: storyId})
-		.sort('-lastUpdatedAt')
+		.sort('-sortorder')
 		.exec(function(err, chapters) {
 		if (err) {
 			console.log(err);
 			done([]);
 			return;
 		}
-		console.log(chapters);
+		//console.log(chapters);
 		done(chapters);
 	});
 
@@ -42,6 +42,26 @@ Chapters.prototype.add = function(chapter, done) {
 	});
 };
 
+/*
+* Update sort orders
+*/
+Chapters.prototype.updateSortorders = function(sortorders, done) {
+	var error = false;
+	for (var i = 0; i < sortorders.length; i++) {
+		chapterModel.update({_id: sortorders[i].id}, {sortorder: sortorders[i].sortorder}, null, function(err) {
+			if (err) {
+				console.error(err);
+				error = true;
+				return;
+			}
+		});
+		if (error) {
+			done({err: true, msg: 'Failed to change chapter order'});
+			return;
+		}
+	}
+	done({err: false, msg: 'Changed chapter order successfully'});
+};
 
 /* 
 * Update basic story information 
