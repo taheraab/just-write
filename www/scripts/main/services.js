@@ -111,3 +111,4 @@ mainServices.service('NavGuard', ['$window', '$rootScope',
 		});
 	}
 ]);
+

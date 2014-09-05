@@ -137,7 +137,6 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 		$scope.forms = {basicForm: null};
 		$scope.chapter.content = '';
 		$scope.master = angular.copy($scope.chapter);
-		
 		/* 
 		* Get content for this chapter
 		*/
@@ -248,6 +247,62 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 			NavGuard.setEditing(newVal);
 
 		});
+		
+		/*
+		* Create a new note and return link to note
+		*/
+		$scope.createNote = function(done) {
+			if (typeof $scope.chapter.isNew != 'undefined' && $scope.chapter.isNew) {
+				$scope.notify('error', 'Cannot create note in unsaved chapter');
+				done(null);
+				return;
+			}		
+			$http.post('services/chapters/addNote', {chapterId: $scope.chapter._id})
+				.success(function(result) {
+					if (result.err) {
+						$scope.notify('error', result.msg);
+						done(null);
+					}else {
+						$scope.notify('success', result.msg);
+						done('note.html?chapterId=' + $scope.chapter._id + '&id=' + result.note._id);
+					}
+				}).error(function() {
+					$scope.notify('error', 'Server Error');
+					done(null);
+				});
+		};
+
+		/*
+		* Get note with id
+		*/
+		$scope.getNote = function(id, done) {
+			if (id != '') {
+				$http.post('services/chapters/getNote', {chapterId: $scope.chapter._id, id: id})
+					.success(done)
+					.error(function() {
+						done(null);
+					});
+			}
+		};
+
+		/*
+		* Delete note
+		*/
+		$scope.deleteNote = function(id, done) {
+			$http.post('services/chapters/deleteNote', {chapterId: $scope.chapter._id, id: id})
+				.success(function(result) {
+					if (result.err) {
+						$scope.notify('error', result.msg);
+					}else {
+						$scope.notify('success', result.msg);
+					}
+					done(result);
+				}).error(function() {
+					$scope.notify('error', 'Server Error');
+					done({err: true});
+				});
+		};
+
 		
 		getContent();
 	}

@@ -1,0 +1,54 @@
+<!doctype html>
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+   <head>
+        <meta charset="utf-8">
+        <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+        <title>Just Write</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/custom.css">
+
+   </head>
+   <body id="note-app" data-ng-app="noteApp" >
+		<div data-ng-controller="NoteCtrl" > 
+			<div data-ng-show="chapter != null">
+			<form name="forms.basicForm" class="form-validation" novalidate>
+				<div class="form-group">
+					<label for="chapter" class="control-label">Chapter</label>
+					<div id="chapter" class="form-control-static">{{chapter.title}}</div>
+				</div>
+				<div class="form-group">
+						<label for="title" class="control-label">Title</label>
+							<input type="text" class="form-control input-sm" id="title" placeholder="Title" data-ng-model="chapter.note.title" required>
+				</div>
+				<div class="form-group">
+						<label for="desc" class="control-label">Description</label>
+						<textarea class="form-control" id="desc" placeholder="Description" data-ng-model="chapter.note.description" rows="6" ></textarea>
+				</div>
+				
+			</form>
+				<button class="btn btn-success btn-sm" ng-click="save()" data-ng-disabled="!forms.basicForm.$valid">Save</button>
+			</div>	
+			<div data-ng-show="chapter == null">
+				<h4> Select note from chapter to view here.</h4>
+			</div>	
+
+		</div>
+		
+	
+
+		    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/toastr/toastr.min.js"></script>
+    
+
+    		<script src="scripts/note/app.js"></script>
+        <script src="scripts/note/controllers.js"></script>
+				<script src="scripts/note/services.js"></script>
+				<script src="scripts/UI/UIService.js"></script>
+    </body>
+</html>

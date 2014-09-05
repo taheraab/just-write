@@ -24,14 +24,6 @@ mainControllers.controller('MainCtrl', ['$scope', 'LoggedInUser', 'logger',
 			}
 		};
 		
-		//sets global status data
-		$scope.statusData = [
-				{name: 'All', value: '0'},
-				{name: 'Active', value: '1'},
-				{name: 'Inactive', value: '2'},
-			];
-		//global status list for lookup based on statusid
-		$scope.statusList = ['All', 'Active', 'Inactive'];
 
 	}
 ]);

@@ -40,4 +40,28 @@ router.post('/deleteChapter', function(req, res, next) {
 	});
 });
 
+router.post('/getNote', function(req, res, next) {
+	Chapters.getNote(req.body.chapterId, req.body.id, function(result) {
+		res.send(result);
+	});
+});
+
+router.post('/addNote', function(req, res, next) {
+	Chapters.addNote(req.body.chapterId, function(result) {
+		res.send(result);
+	});
+});
+
+router.post('/updateNote', function(req, res, next) {
+	Chapters.updateNote(req.body.obj, function(result) {
+		res.send(result);
+	});
+});
+
+router.post('/deleteNote', function(req, res, next) {
+	Chapters.deleteNote(req.body.chapterId, req.body.id, function(result) {
+		res.send(result);
+	});
+});
+
 module.exports = router;

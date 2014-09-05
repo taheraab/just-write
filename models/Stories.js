@@ -20,7 +20,6 @@ Stories.prototype.get = function(userId, done) {
 			done([]);
 			return;
 		}
-		console.log(stories);
 		done(stories);
 	});
 

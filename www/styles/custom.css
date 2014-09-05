@@ -19,3 +19,16 @@
 	font-size: 1.3em;
 }
 
+#note-app {
+	background-color: white;
+}
+
+#note-body iframe {
+	border: 0px;
+}
+
+.page {
+	padding-top: 0;
+}
+
+
