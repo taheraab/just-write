@@ -11,8 +11,9 @@ function Chapters() {
 /*
 * Return chapters for this story 
 */
-Chapters.prototype.get = function(storyId, done) {
+Chapters.prototype.get = function(userId, storyId, done) {
 	chapterModel.find({storyId: storyId}, 'title contentUrl sortorder storyId')
+		.where('userId', userId)
 		.sort('-sortorder')
 		.exec(function(err, chapters) {
 		if (err) {
@@ -29,8 +30,9 @@ Chapters.prototype.get = function(storyId, done) {
 /* 
 * Add a new chapter and return new object
 */
-Chapters.prototype.add = function(chapter, done) {
+Chapters.prototype.add = function(userId, chapter, done) {
 	delete chapter.isNew;
+	chapter.userId = userId;
 	var obj = new chapterModel(chapter);
 	obj.save(function(err, chapter) {
 		if (err) {
@@ -45,10 +47,10 @@ Chapters.prototype.add = function(chapter, done) {
 /*
 * Update sort orders
 */
-Chapters.prototype.updateSortorders = function(sortorders, done) {
+Chapters.prototype.updateSortorders = function(userId, sortorders, done) {
 	var error = false;
 	for (var i = 0; i < sortorders.length; i++) {
-		chapterModel.update({_id: sortorders[i].id}, {sortorder: sortorders[i].sortorder}, null, function(err) {
+		chapterModel.update({_id: sortorders[i].id, userId: userId}, {sortorder: sortorders[i].sortorder}, null, function(err) {
 			if (err) {
 				console.error(err);
 				error = true;
@@ -66,8 +68,10 @@ Chapters.prototype.updateSortorders = function(sortorders, done) {
 /* 
 * Update chapter
 */
-Chapters.prototype.update = function(obj, done) {
-	chapterModel.findById(obj._id, function(err, chapter) {
+Chapters.prototype.update = function(userId, obj, done) {
+	chapterModel.findById(obj._id)
+		.where('userId', userId)
+		.exec(function(err, chapter) {
 		if (err || (chapter == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to update chapter'});
@@ -91,8 +95,10 @@ Chapters.prototype.update = function(obj, done) {
 /* 
 * Delete chapter
 */
-Chapters.prototype.deleteChapter = function(id, done) {
-	chapterModel.remove({_id: id}, function(err) {
+Chapters.prototype.deleteChapter = function(userId, id, done) {
+	chapterModel.remove({_id: id})
+		.where('userId', userId)
+		.exec(function(err) {
 		if (err) {
 			console.error(err);
 			done({err: true, msg: 'Failed to delete chapter'});
@@ -106,8 +112,10 @@ Chapters.prototype.deleteChapter = function(id, done) {
 /* 
 * Get note by id
 */
-Chapters.prototype.getNote = function(chapterId, id, done) {
-	chapterModel.findById(chapterId, function(err, chapter) {
+Chapters.prototype.getNote = function(userId, chapterId, id, done) {
+	chapterModel.findById(chapterId)
+		.where('userId', userId)
+		.exec(function(err, chapter) {
 		if (err || (chapter == null)) {
 			console.error(err);
 			done(null);
@@ -122,8 +130,10 @@ Chapters.prototype.getNote = function(chapterId, id, done) {
 /* 
 * Add new note
 */
-Chapters.prototype.addNote = function(chapterId, done) {
-	chapterModel.findById(chapterId, function(err, chapter) {
+Chapters.prototype.addNote = function(userId, chapterId, done) {
+	chapterModel.findById(chapterId)
+		.where('userId', userId)
+		.exec(function(err, chapter) {
 		if (err || (chapter == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to add note'});
@@ -146,8 +156,10 @@ Chapters.prototype.addNote = function(chapterId, done) {
 /* 
 * Update Note information
 */
-Chapters.prototype.updateNote = function(obj, done) {
-	chapterModel.findById(obj._id, function(err, chapter) {
+Chapters.prototype.updateNote = function(userId, obj, done) {
+	chapterModel.findById(obj._id)
+		.where('userId', userId)
+		.exec(function(err, chapter) {
 		if (err || (chapter == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to update note'});
@@ -171,8 +183,10 @@ Chapters.prototype.updateNote = function(obj, done) {
 /* 
 * Delete note
 */
-Chapters.prototype.deleteNote = function(chapterId, id, done) {
-	chapterModel.findById(chapterId, function(err, chapter) {
+Chapters.prototype.deleteNote = function(userId, chapterId, id, done) {
+	chapterModel.findById(chapterId)
+		.where('userId', userId)
+		.exec(function(err, chapter) {
 		if (err) {
 			console.error(err);
 			done({err: true, msg: 'Failed to delete note'});

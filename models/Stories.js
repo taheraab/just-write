@@ -45,9 +45,11 @@ Stories.prototype.add = function(story, done) {
 /* 
 * Update basic story information 
 */
-Stories.prototype.update = function(obj, done) {
-	storyModel.findById(obj.storyId, function(err, story) {
-		if (err) {
+Stories.prototype.update = function(userId, obj, done) {
+	storyModel.findById(obj.storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+		if (err || (story == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to update story'});
 		}else {
@@ -69,9 +71,11 @@ Stories.prototype.update = function(obj, done) {
 /* 
 * Add new character
 */
-Stories.prototype.addCharacter = function(obj, done) {
-	storyModel.findById(obj.storyId, function(err, story) {
-		if (err) {
+Stories.prototype.addCharacter = function(userId, obj, done) {
+	storyModel.findById(obj.storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+		if (err || (story == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to add character'});
 		}else {
@@ -94,9 +98,11 @@ Stories.prototype.addCharacter = function(obj, done) {
 /* 
 * Update character information
 */
-Stories.prototype.updateCharacter = function(obj, done) {
-	storyModel.findById(obj.storyId, function(err, story) {
-		if (err) {
+Stories.prototype.updateCharacter = function(userId, obj, done) {
+	storyModel.findById(obj.storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+		if (err || (story == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to update character'});
 		}else {
@@ -119,9 +125,11 @@ Stories.prototype.updateCharacter = function(obj, done) {
 /* 
 * Delete character
 */
-Stories.prototype.deleteCharacter = function(storyId, characterId, done) {
-	storyModel.findById(storyId, function(err, story) {
-		if (err) {
+Stories.prototype.deleteCharacter = function(userId, storyId, characterId, done) {
+	storyModel.findById(storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+		if (err || (story == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to delete character'});
 		}else {
@@ -143,9 +151,11 @@ Stories.prototype.deleteCharacter = function(storyId, characterId, done) {
 /* 
 * Add new reference
 */
-Stories.prototype.addReference = function(obj, done) {
-	storyModel.findById(obj.storyId, function(err, story) {
-		if (err) {
+Stories.prototype.addReference = function(userId, obj, done) {
+	storyModel.findById(obj.storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+		if (err || (story == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to add reference'});
 		}else {
@@ -167,9 +177,11 @@ Stories.prototype.addReference = function(obj, done) {
 /* 
 * Update reference information
 */
-Stories.prototype.updateReference = function(obj, done) {
-	storyModel.findById(obj.storyId, function(err, story) {
-		if (err) {
+Stories.prototype.updateReference = function(userId, obj, done) {
+	storyModel.findById(obj.storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+		if (err || (story == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to update reference'});
 		}else {
@@ -190,9 +202,11 @@ Stories.prototype.updateReference = function(obj, done) {
 /* 
 * Delete reference
 */
-Stories.prototype.deleteReference = function(storyId, index, done) {
-	storyModel.findById(storyId, function(err, story) {
-		if (err) {
+Stories.prototype.deleteReference = function(userId, storyId, index, done) {
+	storyModel.findById(storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+		if (err || (story == null)) {
 			console.error(err);
 			done({err: true, msg: 'Failed to delete reference'});
 		}else {

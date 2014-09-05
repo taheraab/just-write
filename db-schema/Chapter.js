@@ -12,7 +12,8 @@ var chapterSchema = new Schema({
 	createdAt: {type: Date, default: new Date()},
 	lastUpdatedAt: Date,
 	contentUrl: String,
-	storyId: {type:ObjectId, required: 'StoryId cannot be null'},
+	storyId: {type:ObjectId, required: 'storyId cannot be null'},
+	userId: {type:ObjectId, required: 'userId cannot be null'},
 	sortorder: Number,
 	notes: [{title: {type: String, required: 'Note title cannot be null'}, description: String}]
 	
