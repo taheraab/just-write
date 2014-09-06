@@ -124,11 +124,6 @@ mainControllers.controller('UserProfileEditCtrl',
 	}
 ]);
 
-mainControllers.controller('DashboardCtrl', ['$scope',
-	function($scope) {
-	
-	}
-]);
 
 /*
 * Controller for confirmation dialog

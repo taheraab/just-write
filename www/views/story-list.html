@@ -6,7 +6,7 @@
 			<div class="col-sm-3 custom-col">
 				<div data-ng-if="stories.length > 0">
 					<p class="text-right"><a href="" class="btn btn-success btn-xs" data-ng-click="createStory()" tooltip="Add new story">New</a></p>
-					<div class="list-group" data-slim-scroll data-scroll-height="800px">
+					<div class="list-group" >
 						<a href="" class="list-group-item" data-ng-repeat="story in stories" data-ng-class="{active: curStoryIndex == $index}" 
 							data-ng-click="setCurStoryIndex($index)">
 								{{story.title}}

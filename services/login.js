@@ -33,7 +33,7 @@ router.post('/signin', function(req, res, next) {
 	
 
 /*
-* Add new tenant with its admin user
+* Add new user with its admin user
 */
 router.post('/signup', function(req, res, next) {
 	var user = {

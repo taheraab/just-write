@@ -31,7 +31,6 @@ Stories.prototype.get = function(userId, done) {
 */
 Stories.prototype.add = function(story, done) {
 	var obj = new storyModel(story);
-	obj.labels.push({name: 'default'});
 	obj.save(function(err, story) {
 		if (err) {
 			console.error(err);

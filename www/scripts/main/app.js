@@ -25,10 +25,6 @@ mainApp.config(['$httpProvider',
 mainApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
-					when('/dashboard', {
-						templateUrl: '/views/dashboard.html',
-						controller: 'DashboardCtrl'
-					}).
 					when('/user-profile', {
 						templateUrl: '/views/user-profile.html',
 						controller: 'UserProfileCtrl'

@@ -37,13 +37,12 @@ loginControllers.controller('SigninCtrl', ['$scope', '$http', '$window',
 loginControllers.controller('SignupCtrl', ['$scope', '$http',
 	function($scope, $http) {
 		$scope.signup = function() {
-			$http.post("/services/login/signup", $scope.tenant).
+			$http.post("/services/login/signup", $scope.user).
 			success(function(result) {
 				if (result.err) 
 					$scope.notify('error', result.msg);
 				else 
 					$scope.notify('success', 'User created successfully, Please login to continue'); 
-				//$window.location.href = "/main.html";
 			})
 		}
 	}
