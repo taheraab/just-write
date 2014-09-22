@@ -80,7 +80,8 @@ mainApp.config(['$provide',
 									var container = editorScope.displayElements.popoverContainer;
 									container.empty();
 									container.css('line-height', '28px');
-									var title = angular.element('<span>' + chapter.note.title + '</span>');
+									var noteTitle = (chapter.note != null)? chapter.note.title : 'Invalid note';
+									var title = angular.element('<span>' + noteTitle + '</span>');
 									title.css({
 										'display': 'inline-block',
 										'max-width': '200px',
@@ -96,6 +97,12 @@ mainApp.config(['$provide',
 									
 									delButton.on('click', function(event){
 										event.preventDefault();
+										if (chapter.note == null){
+												$element.replaceWith('');
+												editorScope.updateTaBindtaTextElement();
+												editorScope.hidePopover();
+												return;
+										}
 										editorScope.$parent.deleteNote(noteId, function(result) {
 											if (!result.err) {
 												$element.replaceWith('');
@@ -105,7 +112,7 @@ mainApp.config(['$provide',
 										});
 									});
 									
-									buttonGroup.append(link);
+									if (chapter.note != null) buttonGroup.append(link);
 									buttonGroup.append(delButton);
 									container.append(buttonGroup);
 									editorScope.showPopover($element);																	

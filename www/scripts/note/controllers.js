@@ -9,7 +9,6 @@ noteControllers.controller('NoteCtrl', ['$scope', '$location', 'logger', '$http'
 		
 		$scope.init = function() {
 			var arr = /note.html\?chapterId=([0-9a-f]+)&id=([0-9a-f]+)/.exec($location.absUrl());
-			console.log(arr);
 			var chapterId = (arr != null && typeof arr[1] != 'undefined')? arr[1] : '';
 			var id = (arr != null && typeof arr[2] != 'undefined')? arr[2] : '';
 			if (chapterId != '') {

@@ -32,7 +32,14 @@
 							<h4>{{chapter.title}}
 								<div class="pull-right">
 									<a href="" tooltip="Edit mode" data-ng-click="edit()"><i class="fa fa-edit"></i> </a>
-									&emsp;<a href="" tooltip="Delete chapter" data-ng-click="deleteChapter($index)"><i class="fa fa-trash-o"></i></a>
+									&emsp;
+									<span class="dropdown">
+										<a href="" class="dropdown-toggle"><i class="fa fa-trash-o"></i></a>
+										<ul class="dropdown-menu">
+											<li><a href="" data-ng-click="deleteAllNotes($index)">Remove notes</a></li>
+											<li><a href="" data-ng-click="deleteChapter($index)">Delete chapter</a></li>
+										</ul>
+									</span>
 								</div>
 							</h4>	
 							<hr>

@@ -240,6 +240,7 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 			});
 		}
 		
+
 		/*
 		* Watch for change in edit state and set parent isDirty accordingly
 		*/
@@ -303,6 +304,25 @@ chapterControllers.controller('ChapterCtrl', ['$scope', '$http', '$window', 'Nav
 				});
 		};
 
+		/*
+		* Remove notes from chapter
+		*/
+		$scope.deleteAllNotes = function() {
+			ConfirmDialog.show('Confirm removal of notes in ' + $scope.chapter.title + ' ?', function(result) {
+				if (result) {
+					$http.post('services/chapters/deleteAllNotes', {chapterId: $scope.chapter._id})
+						.success(function(result) {
+							if (result.err) $scope.notify('error', result.msg)
+							else {
+								getContent();
+								$scope.notify('success', result.msg);
+							}
+						}).error(function() {
+							$scope.notify('error', 'Server Error');
+						});
+				}
+			});
+		}
 		
 		getContent();
 	}

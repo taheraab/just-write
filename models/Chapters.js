@@ -1,6 +1,7 @@
 'use strict';
 var config = require('../app-config.js');
 var fs = require('fs');
+var path = require('path');
 var mongoose = require('mongoose');
 var chapterSchema = require('../db-schema/Chapter');
 var chapterModel = mongoose.model('Chapters', chapterSchema);
@@ -121,8 +122,8 @@ Chapters.prototype.getNote = function(userId, chapterId, id, done) {
 			done(null);
 		}else {
 			var note = chapter.notes.id(id);
-			if (note == null) done(null);
-			else done({_id: chapter._id, title: chapter.title, note: note});
+			//if (note == null) done(null);
+			done({_id: chapter._id, title: chapter.title, note: note});
 		}
 	});
 };
@@ -203,6 +204,42 @@ Chapters.prototype.deleteNote = function(userId, chapterId, id, done) {
 				}
 			});	
 		}
+	});
+};
+
+/* 
+* Delete all notes from chapter and update chapter content
+*/
+Chapters.prototype.deleteAllNotes = function(userId, chapterId, done) {
+	var thisRef = this;
+	chapterModel.findById(chapterId)
+		.where('userId', userId)
+		.exec(function(err, chapter) {
+			if (err) {
+				console.error(err);
+				done({err: true, msg: 'Failed to delete notes'});
+				return;
+			}
+			chapter.notes = [];
+			var filename = config.user.dataDir + '/' + path.basename(chapter.contentUrl);
+			fs.readFile(filename, {encoding: 'utf8'}, function(err, data) {
+				if (err) {
+					console.error(err);
+					done({err: true, msg: 'Failed to delete notes'});
+					return;
+				}
+				// Remove note references from chapter content
+				chapter.content = data.replace(/<a.*?value="jw-note".*?>.*?<\/a>/ig, '');
+				chapter.lastUpdatedAt = new Date();
+				chapter.save(function(err) {
+					if (err) {
+						console.error(err);
+						done({err: true, msg: 'Failed to delete notes'});
+					}else {
+						done({err: false, msg: 'Deleted notes successfully'});
+					}
+				});
+			});	
 	});
 };
 

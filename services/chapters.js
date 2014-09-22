@@ -64,4 +64,10 @@ router.post('/deleteNote', function(req, res, next) {
 	});
 });
 
+router.post('/deleteAllNotes', function(req, res, next) {
+	Chapters.deleteAllNotes(req.session.user._id, req.body.chapterId, function(result) {
+		res.send(result);
+	});
+});
+
 module.exports = router;

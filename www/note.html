@@ -16,6 +16,10 @@
    <body id="note-app" data-ng-app="noteApp" >
 		<div data-ng-controller="NoteCtrl" > 
 			<div data-ng-show="chapter != null">
+			<div data-ng-show="chapter.note == null">
+				<p class="text-danger"> Invalid note reference. This note was deleted from database. Edit chapter to delete note link.</p>
+			</div>
+			<div data-ng-show="chapter.note != null">
 			<form name="forms.basicForm" class="form-validation" novalidate>
 				<div class="form-group">
 					<label for="chapter" class="control-label">Chapter</label>
@@ -33,6 +37,7 @@
 			</form>
 				<button class="btn btn-success btn-sm" ng-click="save()" data-ng-disabled="!forms.basicForm.$valid">Save</button>
 			</div>	
+			</div>
 			<div data-ng-show="chapter == null">
 				<h4> Select note from chapter to view here.</h4>
 			</div>	
