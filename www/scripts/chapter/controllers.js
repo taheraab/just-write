@@ -79,9 +79,17 @@ chapterControllers.controller('ChapterListCtrl', ['$scope', '$http', '$routePara
 		* Called when a chapter is closed
 		*/
 		$scope.parentCloseChapter = function(i, deleteChapter) {
-			if ((typeof $scope.activeChapters[i].isNew != 'undefined' && $scope.activeChapters[i].isNew) || deleteChapter)
-				$scope.chapters.splice($scope.curChapterIndex, 1);
+			var curChapterIndex = $scope.curChapterIndex;
+			var curChapter = $scope.chapters[curChapterIndex];
+			if ((typeof $scope.activeChapters[i].isNew != 'undefined' && $scope.activeChapters[i].isNew) || deleteChapter) {
+				var index = $scope.chapters.indexOf($scope.activeChapters[i]);
+				$scope.chapters.splice(index, 1);
+				if (index != curChapterIndex) {
+					$scope.curChapterIndex = $scope.chapters.indexOf(curChapter);
+				}
+			}	
 			$scope.activeChapters.splice(i, 1);
+			
 			if ($scope.chapters.length == 0) {
 				$scope.createChapter();
 			}
