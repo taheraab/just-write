@@ -28,6 +28,34 @@ Chapters.prototype.get = function(userId, storyId, done) {
 
 };
 
+/*
+* Return printable content (without notes)
+*/
+Chapters.prototype.getPrintableContent = function(userId, chapterId, done) {
+	chapterModel.findById(chapterId)
+		.where('userId', userId)
+		.exec(function(err, chapter) {
+			if (err) {
+				console.error(err);
+				done(null);
+				return;
+			}
+			var filename = config.user.dataDir + '/' + path.basename(chapter.contentUrl);
+			fs.readFile(filename, {encoding: 'utf8'}, function(err, data) {
+				if (err) {
+					console.error(err);
+					done(null);
+					return;
+				}
+				console.log(data);
+				// Remove note references from chapter content
+				var content = data.replace(/<a.*?value="jw-note".*?>.*?<\/a>/ig, '');
+				console.log(content);
+				done(content);
+			});	
+	});
+};
+
 /* 
 * Add a new chapter and return new object
 */

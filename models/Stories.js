@@ -2,8 +2,10 @@
 var config = require('../app-config.js');
 var mongoose = require('mongoose');
 var storySchema = require('../db-schema/Story');
-var storyModel = mongoose.model('Stories', storySchema);
+var chapterSchema = require('../db-schema/Chapter');
 
+var storyModel = mongoose.model('Stories', storySchema);
+var chapterModel = mongoose.model('Chapters', chapterSchema);
 
 function Stories() {
 }
@@ -25,6 +27,28 @@ Stories.prototype.get = function(userId, done) {
 
 };
 
+/*
+* Return full story for printing
+*/
+Stories.prototype.getFullStory = function(userId, storyId, done) {
+	storyModel.findById(storyId)
+		.where('userId', userId)
+		.exec(function(err, story) {
+			if (err || story == null) {
+				console.error(err);
+				done(null);
+				return;
+			}
+			chapterModel.find({storyId: storyId})
+				.sort('+sortorder')
+				.exec(function(err, chapters) {
+						if (err) {
+							console.error(err);
+						}
+						done({story: story, chapters: chapters});			
+				});
+		});
+};
 
 /* 
 * Add a new story and return new object

@@ -35,3 +35,11 @@
 	position: relative;
 	z-index: 3;
 }
+
+.indented {
+	text-indent: 2em;
+}
+
+.new-page {
+	page-break-before: always;
+}

@@ -14,8 +14,11 @@ router.get('/', function(req, res, next) {
 	});
 });	
 	
-
-
+router.post('/getFullStory', function(req, res, next) {
+	Stories.getFullStory(req.session.user._id, req.body.storyId, function(result) {
+		res.send(result);
+	});
+});
 	
 router.post('/add', function(req, res, next) {
 	var story = req.body.obj;

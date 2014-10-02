@@ -14,8 +14,12 @@ router.post('/', function(req, res, next) {
 	});
 });	
 	
+router.post('/getPrintableContent', function(req, res, next) {
+	Chapters.getPrintableContent(req.session.user._id, req.body.id, function(result) {
+		res.send(result);
+	});
+});
 
-	
 router.post('/add', function(req, res, next) {
 	Chapters.add(req.session.user._id, req.body.chapter, function(result) {
 		res.send(result);

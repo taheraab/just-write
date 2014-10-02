@@ -19,6 +19,7 @@
 		</div>
 		<div class="col-sm-9" data-ng-if="stories.length > 0">
 			<p class="text-right">
+				<a class="btn btn-xs btn-success" data-ng-href="/preview.html?storyId={{stories[curStoryIndex]._id}}" tooltip="Print preview" target="_blank">Print Story</a>&nbsp;
 				<a class="btn btn-xs btn-success" data-ng-href="#/chapters/{{stories[curStoryIndex]._id}}/{{stories[curStoryIndex].title}}" tooltip="Go to story view">View Story</a></p>
 				<h3>Basic <a class="pull-right" href="" data-ng-click="editStory()" tooltip="Edit basic info"><i class="fa fa-edit"></i></a></h3>
 				<ul class="list-unstyled list-info">
