@@ -43,3 +43,15 @@
 .new-page {
 	page-break-before: always;
 }
+
+#preview {
+	overflow: auto;
+}
+
+#preview body {
+	background-color: white;
+}
+
+.ui-editor  .ta-scroll-window{
+	height: 400px;
+}
