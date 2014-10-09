@@ -27,7 +27,7 @@ router.post('/signin', function(req, res, next) {
 				});
 			}
 		});
-		res.send(200);
+		res.status(200).end();
 	});
 });
 	

@@ -18,7 +18,7 @@ Stories.prototype.get = function(userId, done) {
 		.sort('-lastUpdatedAt')
 		.exec(function(err, stories) {
 		if (err) {
-			console.log(err);
+			console.error(err);
 			done([]);
 			return;
 		}

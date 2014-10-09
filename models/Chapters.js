@@ -5,6 +5,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var chapterSchema = require('../db-schema/Chapter');
 var chapterModel = mongoose.model('Chapters', chapterSchema);
+var cheerio = require('cheerio');
 
 function Chapters() {
 }
@@ -18,11 +19,10 @@ Chapters.prototype.get = function(userId, storyId, done) {
 		.sort('-sortorder')
 		.exec(function(err, chapters) {
 		if (err) {
-			console.log(err);
+			console.error(err);
 			done([]);
 			return;
 		}
-		//console.log(chapters);
 		done(chapters);
 	});
 
@@ -47,10 +47,10 @@ Chapters.prototype.getPrintableContent = function(userId, chapterId, done) {
 					done(null);
 					return;
 				}
-				console.log(data);
 				// Remove note references from chapter content
-				var content = data.replace(/<a.*?value="jw-note".*?>.*?<\/a>/ig, '');
-				console.log(content);
+				var $ = cheerio.load(data);
+				$('a[value="jw-note"]').remove();
+				var content = $.html();
 				done(content);
 			});	
 	});
@@ -257,7 +257,9 @@ Chapters.prototype.deleteAllNotes = function(userId, chapterId, done) {
 					return;
 				}
 				// Remove note references from chapter content
-				chapter.content = data.replace(/<a.*?value="jw-note".*?>.*?<\/a>/ig, '');
+				var $ = cheerio.load(data);
+				$('a[value="jw-note"]').remove();
+				chapter.content = $.html();
 				chapter.lastUpdatedAt = new Date();
 				chapter.save(function(err) {
 					if (err) {
