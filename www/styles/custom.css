@@ -52,6 +52,7 @@
 	background-color: white;
 }
 
-.ui-editor  .ta-scroll-window{
-	height: 400px;
+.ui-editor  .ta-scroll-window.form-control{
+	height: 302px;
+	overflow: auto;
 }

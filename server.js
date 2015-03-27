@@ -44,7 +44,7 @@ var checkSession = function(req, res, next) {
 	if (req.session.user) {
 		next();
 	}else {
-		res.send(401);
+		res.status(401).end();
 	}
 };
 
